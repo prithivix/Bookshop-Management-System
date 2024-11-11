@@ -1,0 +1,116 @@
+import turtle
+import random
+import time
+
+# Set up screen
+screen = turtle.Screen()
+screen.title("Snake Game")
+screen.setup(width=600, height=600)
+screen.bgcolor("black")
+screen.tracer(0)  # Turn off animation for faster updates
+
+# Snake head
+head = turtle()
+head.speed(0)  # Set animation speed to 0 (fastest)
+head.shape("square")
+head.color("white")
+head.penup()
+head.goto(0, 0)
+head.setheading(0)  # Start facing right
+
+# Snake food
+food = turtle()
+pen.speed(0)
+pen.shape("none")
+pen.color("white")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 260)
+pen.write("Score: 0", align="center", font=("Arial", 24, "normal"))
+
+# Score
+score = 0
+
+# Movement speed
+delay = 0.1
+
+# Movement functions
+def go_up():
+  if head.heading() != 270:
+    head.setheading(90)
+
+def go_down():
+  if head.heading() != 90:
+    head.setheading(270)
+
+def go_left():
+  if head.heading() != 0:
+    head.setheading(180)
+
+def go_right():
+  if head.heading() != 180:
+    head.setheading(0)
+
+# Keyboard bindings
+screen.listen()
+screen.onkeypress(go_up, "w")
+screen.onkeypress(go_down, "s")
+screen.onkeypress(go_left, "a")
+screen.onkeypress(go_right, "d")
+
+# Main game loop
+while True:
+  screen.update()
+
+  # Move snake
+  x = head.xcor()
+  y = head.ycor()
+  if head.heading() == 0:
+    x += 20
+  elif head.heading() == 180:
+    x -= 20
+  elif head.heading() == 90:
+    y += 20
+  elif head.heading() == 270:
+    y -= 20
+  head.goto(x, y)
+
+  # Border checking
+  if head.xcor() > 290 or head.xcor() < -290 or head.ycor() > 290 or head.ycor() < -290:
+    time.sleep(1)
+    head.goto(0, 0)
+    head.setheading(0)
+    score = 0
+    pen.clear()
+    pen.write("Score: {}".format(score), align="center", font=("Arial", 24, "normal"))
+
+  # Check for food collision
+  if head.distance(food) < 20:
+    # Move food to random location
+    food.goto(random.randint(-290, 290), random.randint(-290, 290))
+    score += 10
+    pen.clear()
+    pen.write("Score: {}".format(score), align="center", font=("Arial", 24, "normal"))
+    delay *= 0.9  # Increase game speed
+
+  # Add new segment to snake
+  tail = turtle()
+  tail.speed(0)
+  tail.shape("square")
+  tail.color("white")
+  tail.penup()
+  tail.goto(0, 0)
+  tail.setheading(head.heading())
+  segments = []
+  segments.append(tail)
+
+  # Check for collisions with body
+  for segment in segments:
+    if segment.distance(head) < 20:
+      time.sleep(1)
+      head.goto(0, 0)
+      head.setheading(0)
+      score = 0
+      for segment in segments:
+        segment.goto(1000, 1000)  # Move segments off screen
+      segments.clear()

@@ -1,0 +1,156 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_BOOKS 100
+
+// Structure to represent a book
+struct Book {
+    char title[100];
+    char author[100];
+    int quantity;
+    float price;
+};
+
+// Array to store books
+struct Book books[MAX_BOOKS];
+int numBooks = 0;
+
+// Function prototypes
+void addBook();
+void displayBooks();
+void searchBook();
+void updateBook();
+void deleteBook();
+
+int main() {
+    int choice;
+
+    do {
+        printf("\nBookshop Management System\n");
+        printf("1. Add Book\n");
+        printf("2. Display Books\n");
+        printf("3. Search Book\n");
+        printf("4. Update Book\n");
+        printf("5. Delete Book\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+                break;
+            case 3:
+                searchBook();
+                break;
+            case 4:
+                updateBook();
+                break;
+            case 5:
+                deleteBook();
+                break;
+            case 6:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice != 6);
+
+    return 0;
+}
+
+void addBook() {
+    if (numBooks >= MAX_BOOKS) {
+        printf("Cannot add more books. Maximum limit reached.\n");
+        return;
+    }
+
+    struct Book newBook;
+    printf("Enter book title: ");
+    scanf(" %[^\n]", newBook.title);
+    printf("Enter author name: ");
+    scanf(" %[^\n]", newBook.author);
+    printf("Enter quantity: ");
+    scanf("%d", &newBook.quantity);
+    printf("Enter price: ");
+    scanf("%f", &newBook.price);
+
+    books[numBooks++] = newBook;
+    printf("Book added successfully.\n");
+}
+
+void displayBooks() {
+    if (numBooks == 0) {
+        printf("No books available.\n");
+        return;
+    }
+
+    printf("%-30s%-30s%-10s%-10s\n", "Title", "Author", "Quantity", "Price");
+    for (int i = 0; i < numBooks; i++) {
+        printf("%-30s%-30s%-10d%-10.2f\n", books[i].title, books[i].author, books[i].quantity, books[i].price);
+    }
+}
+
+void searchBook() {
+    char title[100];
+    printf("Enter book title to search: ");
+    scanf(" %[^\n]", title);
+
+    int found = 0;
+    for (int i = 0; i < numBooks; i++) {
+        if (strcmp(books[i].title, title) == 0) {
+            printf("Book found:\n");
+            printf("Title: %s\nAuthor: %s\nQuantity: %d\nPrice: %.2f\n", books[i].title, books[i].author, books[i].quantity, books[i].price);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Book not found.\n");
+    }
+}
+
+void updateBook() {
+    char title[100];
+    printf("Enter book title to update: ");
+    scanf(" %[^\n]", title);
+
+    int found = 0;
+    for (int i = 0; i < numBooks; i++) {
+        if (strcmp(books[i].title, title) == 0) {
+            printf("Enter new quantity: ");
+            scanf("%d", &books[i].quantity);
+            printf("Enter new price: ");
+            scanf("%f", &books[i].price);
+            printf("Book updated successfully.\n");
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Book not found.\n");
+    }
+}
+
+void deleteBook() {
+    char title[100];
+    printf("Enter book title to delete: ");
+    scanf(" %[^\n]", title);
+
+    int found = 0;
+    for (int i = 0; i < numBooks; i++) {
+        if (strcmp(books[i].title, title) == 0) {
+            for (int j = i; j < numBooks - 1; j++) {
+                books[j] = books[j + 1];
+            }
+            numBooks--;
+            printf("Book deleted successfully.\n");
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Book not found.\n");
+    }
+}
